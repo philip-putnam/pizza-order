@@ -52,14 +52,22 @@ $(document).ready(function() {
 var userOrder = new Order();
 var userPizza = new Pizza();
 
-  $("#size-button").click(function() {
+  $("#add-to-cart-button").click(function() {
     var userPizzaSize = $("#user-pizza-size").val();
     var userPizzaTopping = $("#user-pizza-topping").val();
     userPizza.createPizza(userPizzaSize, userPizzaTopping);
     userOrder.addPizzaToOrder(userPizza);
-    $(".col-md-4").append(userOrder.pizzas[0].pizzaSize + " " + userOrder.pizzas[0].pizzaTopping + " pizza");
-    $(".col-md-4").append("Total: $" + userOrder.orderPrice());
-  })
+    $(".col-md-4").append(userOrder.pizzas[0].pizzaSize + " " + userOrder.pizzas[0].pizzaTopping + " pizza ");
+    $(".col-md-4").append("Total: $" + userOrder.orderPrice() + "<br>");
+  });
+
+  $("#add-topping-button").click(function() {
+    $("#add-to-cart-button").before('<select class="form-control" id="user-pizza-toping">' +
+                                      '<option>extra cheese</option>' +
+                                      '<option>pepperoni</option>' +
+                                      '<option>mushroom</option>' +
+                                    '</select>');
+  });
 
 
 });
