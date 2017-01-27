@@ -2,14 +2,16 @@
 
 function Pizza() {
   this.pizzaSize;
+  this.pizzaTopping;
 }
 
 function Order() {
   this.pizzas = [];
 }
 
-Pizza.prototype.createPizza = function(pizzaSize) {
+Pizza.prototype.createPizza = function(pizzaSize, pizzaTopping) {
   this.pizzaSize = pizzaSize;
+  this.pizzaTopping = pizzaTopping;
 }
 
 Order.prototype.addPizzaToOrder = function(pizza) {
@@ -23,11 +25,11 @@ var userOrder = new Order();
 var userPizza = new Pizza();
 
   $("#size-button").click(function() {
-    var userInput = $("#user-pizza-size").val();
-    userPizza.createPizza(userInput);
+    var userPizzaSize = $("#user-pizza-size").val();
+    var userPizzaTopping = $("#user-pizza-topping").val();
+    userPizza.createPizza(userPizzaSize, userPizzaTopping);
     userOrder.addPizzaToOrder(userPizza);
-    $(".col-md-4").append(userOrder.pizzas[0].pizzaSize);
-    // alert(tempOrder.pizzas[0].pizzaSize);
+    $(".col-md-4").append(userOrder.pizzas[0].pizzaSize + " " + userOrder.pizzas[0].pizzaTopping + " pizza");
   })
 
 });
