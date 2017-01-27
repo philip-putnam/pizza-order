@@ -2,7 +2,8 @@
 
 function Pizza() {
   this.pizzaSize;
-  this.pizzaTopping;
+  this.pizzaToppings = [];
+  this.numberOfToppings;
 }
 
 function Order() {
@@ -11,7 +12,8 @@ function Order() {
 
 Pizza.prototype.createPizza = function(pizzaSize, pizzaTopping) {
   this.pizzaSize = pizzaSize;
-  this.pizzaTopping = pizzaTopping;
+  this.pizzaToppings = pizzaTopping;
+  this.numberOfToppings = pizzaTopping.length;
 }
 
 Order.prototype.addPizzaToOrder = function(pizza) {
@@ -19,6 +21,8 @@ Order.prototype.addPizzaToOrder = function(pizza) {
 }
 
 Order.prototype.orderPrice = function() {
+  alert(this.pizzas[0].pizzaToppings);
+  alert(this.pizzas[0].numberOfToppings);
   var orderTotal = 0;
   // An array "sizePrices" holds the size to price key-value pairs
   var sizePrices = [
@@ -36,10 +40,12 @@ Order.prototype.orderPrice = function() {
   }
 
   for (var index = 0; index < meatToppings.length; index++) {
-    if (this.pizzas[0].pizzaTopping === meatToppings[index]) {
-      orderTotal += 2.5;
-    } else {
-      orderTotal += 1;
+    for (var counter = 0; counter < this.pizzas[0].numberOfToppings; counter++){
+      if (this.pizzas[0].pizzaToppings[0] === meatToppings[index]) {
+        orderTotal += 2.5;
+      } else {
+        orderTotal += 1;
+      }
     }
   }
 
@@ -49,20 +55,24 @@ Order.prototype.orderPrice = function() {
 // Front-end, user-interface logic
 
 $(document).ready(function() {
-var userOrder = new Order();
-var userPizza = new Pizza();
 
   $("#add-to-cart-button").click(function() {
+    var userOrder = new Order();
+    var userPizza = new Pizza();
+    var userTopping = [];
     var userPizzaSize = $("#user-pizza-size").val();
     var userPizzaTopping = $("#user-pizza-topping").val();
-    userPizza.createPizza(userPizzaSize, userPizzaTopping);
+    userTopping.push(userPizzaTopping);
+    userPizzaTopping = $("#user-add-topping").val();
+    userTopping.push(userPizzaTopping);
+    userPizza.createPizza(userPizzaSize, userTopping);
     userOrder.addPizzaToOrder(userPizza);
-    $(".col-md-4").append(userOrder.pizzas[0].pizzaSize + " " + userOrder.pizzas[0].pizzaTopping + " pizza ");
+    $(".col-md-4").append(userOrder.pizzas[0].pizzaSize + " " + userOrder.pizzas[0].pizzaToppings[0] + " pizza ");
     $(".col-md-4").append("Total: $" + userOrder.orderPrice() + "<br>");
   });
 
   $("#add-topping-button").click(function() {
-    $("#add-to-cart-button").before('<select class="form-control" id="user-pizza-toping">' +
+    $("#add-to-cart-button").before('<select class="form-control" id="user-add-toping">' +
                                       '<option>extra cheese</option>' +
                                       '<option>pepperoni</option>' +
                                       '<option>mushroom</option>' +
