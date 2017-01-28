@@ -19,13 +19,7 @@ Pizza.prototype.createPizza = function(pizzaSize, pizzaTopping) {
   this.numberOfToppings = pizzaTopping.length;
 }
 
-Order.prototype.addPizzaToOrder = function(pizza) {
-  this.pizzas.push(pizza);
-  this.numberOfPizzas = (this.pizzas.length - 1);
-}
-
-Order.prototype.orderPrice = function() {
-
+Pizza.prototype.calcPizzaPrice = function() {
   // An array "sizePrices" holds the size to price key-value pairs
   var sizePrices = [
     {pizzaSize: "Small", price: 6},
@@ -33,22 +27,29 @@ Order.prototype.orderPrice = function() {
     {pizzaSize: "Large", price: 10}
   ];
   var meatToppings = ["pepperoni", "sasauge", "bacon", "salami", "ground beef"];
-  // For loop, iterates through the "sizePrices" array
   for (var index = 0; index < sizePrices.length; index++) {
-    if (this.pizzas[0].pizzaSize === sizePrices[index].pizzaSize) {
-      this.orderTotal += sizePrices[index].price;
+    if (this.pizzaSize === sizePrices[index].pizzaSize) {
+      this.pizzaPrice += sizePrices[index].price;
     }
   }
   // I decided non-meat toppings were $1 and meat was $2.5, since any topping started wtih a base of $1, I simply added $1.5 if it was meat. Using this nested for-loop
-  for (var index = 0; index < this.pizzas[0].numberOfToppings; index++) {
-    this.orderTotal += 1;
+  for (var index = 0; index < this.numberOfToppings; index++) {
+    this.pizzaPrice += 1;
     for (var ctr = 0; ctr < meatToppings.length; ctr++) {
-      if (this.pizzas[0].pizzaToppings[index] === meatToppings[ctr]) {
-        this.orderTotal += 1.5;
+      if (this.pizzaToppings[index] === meatToppings[ctr]) {
+        this.pizzaPrice += 1.5;
         ctr = meatToppings.length;
       }
     }
   }
+
+
+}
+
+Order.prototype.addPizzaToOrder = function(pizza) {
+  this.pizzas.push(pizza);
+  this.numberOfPizzas = (this.pizzas.length - 1);
+  this.orderTotal += pizza.pizzaPrice;
 }
 
 Order.prototype.returnOrderInfo = function(pizzaNumber) {
@@ -56,6 +57,7 @@ Order.prototype.returnOrderInfo = function(pizzaNumber) {
     pizzaSize: this.pizzas[pizzaNumber].pizzaSize,
     pizzaToppings: this.pizzas[pizzaNumber].pizzaToppings,
     numberOfToppings: this.pizzas[pizzaNumber].numberOfToppings,
+    pizzaPrice: this.pizzas[pizzaNumber].pizzaPrice,
     orderTotal: this.orderTotal,
     numberOfPizzas: this.numberOfPizzas
   };
@@ -73,7 +75,8 @@ function displayOrder (userOrderInfo) {
     $(".col-md-4").append(" " + topping + ", ");
   })
   $(".col-md-4").append("pizza<br>");
-  $(".col-md-4").append("Total: " + userOrderInfo.orderTotal + ".<br>");
+  $(".col-md-4").append("Pizza price: $" + userOrderInfo.pizzaPrice + ".<br>");
+  $("#order-total").text("Order Total: $" + userOrderInfo.orderTotal);
 }
 
 $(document).ready(function() {
@@ -87,14 +90,11 @@ $(document).ready(function() {
       userTopping.push($(this).val());
     })
     userPizza.createPizza(userPizzaSize, userTopping);
+    userPizza.calcPizzaPrice();
     userOrder.addPizzaToOrder(userPizza);
-    userOrder.orderPrice();
-
 
     var outputOrder = userOrder.returnOrderInfo(userOrder.pizzaAmount());
     displayOrder(outputOrder);
-
-    $("#user-add-topping").hide();
   });
 
 });
