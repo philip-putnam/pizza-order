@@ -4,11 +4,13 @@ function Pizza() {
   this.pizzaSize;
   this.pizzaToppings = [];
   this.numberOfToppings;
+  this.pizzaPrice = 0;
 }
 
 function Order() {
   this.pizzas = [];
   this.orderTotal = 0;
+  this.numberOfPizzas;
 }
 
 Pizza.prototype.createPizza = function(pizzaSize, pizzaTopping) {
@@ -19,6 +21,7 @@ Pizza.prototype.createPizza = function(pizzaSize, pizzaTopping) {
 
 Order.prototype.addPizzaToOrder = function(pizza) {
   this.pizzas.push(pizza);
+  this.numberOfPizzas = (this.pizzas.length - 1);
 }
 
 Order.prototype.orderPrice = function() {
@@ -53,8 +56,13 @@ Order.prototype.returnOrderInfo = function(pizzaNumber) {
     pizzaSize: this.pizzas[pizzaNumber].pizzaSize,
     pizzaToppings: this.pizzas[pizzaNumber].pizzaToppings,
     numberOfToppings: this.pizzas[pizzaNumber].numberOfToppings,
-    orderTotal: this.orderTotal
+    orderTotal: this.orderTotal,
+    numberOfPizzas: this.numberOfPizzas
   };
+}
+
+Order.prototype.pizzaAmount = function() {
+  return this.numberOfPizzas;
 }
 
 // Front-end, user-interface logic
@@ -69,11 +77,9 @@ function displayOrder (userOrderInfo) {
 }
 
 $(document).ready(function() {
-var additionalToppingFieldPopulator = [];
-var toppingsCounter = 0;
+  var userOrder = new Order();
 
   $("#add-to-cart-button").click(function() {
-    var userOrder = new Order();
     var userPizza = new Pizza();
     var userTopping = [];
     var userPizzaSize = $("#user-pizza-size").val();
@@ -84,7 +90,8 @@ var toppingsCounter = 0;
     userOrder.addPizzaToOrder(userPizza);
     userOrder.orderPrice();
 
-    var outputOrder = userOrder.returnOrderInfo(0);
+
+    var outputOrder = userOrder.returnOrderInfo(userOrder.pizzaAmount());
     displayOrder(outputOrder);
 
     $("#user-add-topping").hide();
