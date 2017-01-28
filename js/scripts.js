@@ -62,43 +62,32 @@ Order.prototype.returnOrderInfo = function(pizzaNumber) {
 function displayOrder (userOrderInfo) {
   $(".col-md-4").append(userOrderInfo.pizzaSize + " ");
   userOrderInfo.pizzaToppings.forEach(function(topping) {
-    $(".col-md-4").append(" " + topping + " ");
+    $(".col-md-4").append(" " + topping + ", ");
   })
   $(".col-md-4").append("pizza<br>");
   $(".col-md-4").append("Total: " + userOrderInfo.orderTotal + ".<br>");
 }
 
-
-
 $(document).ready(function() {
+var additionalToppingFieldPopulator = [];
+var toppingsCounter = 0;
 
   $("#add-to-cart-button").click(function() {
     var userOrder = new Order();
     var userPizza = new Pizza();
     var userTopping = [];
     var userPizzaSize = $("#user-pizza-size").val();
-    var userPizzaTopping = $("#user-pizza-topping").val();
-    userTopping.push(userPizzaTopping);
-    if (userPizzaTopping = $("#user-add-topping").val()) {
-      userTopping.push(userPizzaTopping);
-    };
+    $("input:checkbox[name=user-pizza-toppings]:checked").each(function() {
+      userTopping.push($(this).val());
+    })
     userPizza.createPizza(userPizzaSize, userTopping);
     userOrder.addPizzaToOrder(userPizza);
     userOrder.orderPrice();
-    // $(".col-md-4").append(userOrder.pizzas[0].pizzaSize + " " + userOrder.pizzas[0].pizzaToppings[0] + " pizza ");
-    // $(".col-md-4").append("Total: $" + userOrder.orderPrice() + "<br>");
 
     var outputOrder = userOrder.returnOrderInfo(0);
     displayOrder(outputOrder);
-  });
 
-  $("#add-topping-button").click(function() {
-    $("#add-to-cart-button").before('<select class="form-control" id="user-add-topping">' +
-                                      '<option>extra cheese</option>' +
-                                      '<option>pepperoni</option>' +
-                                      '<option>mushroom</option>' +
-                                    '</select>');
+    $("#user-add-topping").hide();
   });
-
 
 });

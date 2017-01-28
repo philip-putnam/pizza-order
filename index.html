@@ -20,20 +20,21 @@
         <div class="row">
 
           <div class="col-md-8">
+            <h3>Pick pizza size:</h3>
             <select class="form-control" id="user-pizza-size">
               <option>Small</option>
               <option>Medium</option>
               <option>Large</option>
             </select>
 
-            <select class="form-control" id="user-pizza-topping">
-              <option>cheese</option>
-              <option>pepperoni</option>
-              <option>mushroom</option>
-            </select>
+            <div class="form-group">
+              <h4>Pick your pizza toppings</h4>
+              <input type="checkbox" name="user-pizza-toppings" value="cheese"> Cheese<br>
+              <input type="checkbox" name="user-pizza-toppings" value="pepperoni"> Pepperoni<br>
+              <input type="checkbox" name="user-pizza-toppings" value="mushroom"> Mushroom<br>
+            </div>
 
             <button class="btn" id="add-to-cart-button" type="button">Add to cart</button>
-            <button class="btn" id="add-topping-button" type="button">Additional topping</button>
 
           </div>
 
